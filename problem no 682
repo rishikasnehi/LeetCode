@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int calPoints(vector<string>& operations) {
+        stack<int> scores;
+        int top = -1;
+        for(auto a : operations)
+        {
+            if (a == "C") {
+                if (!scores.empty())
+                    scores.pop();
+            } 
+            else if (a == "D") {
+                if (!scores.empty())
+                    scores.push(2 * scores.top());
+            } 
+            else if (a == "+") {
+                if (scores.size() >= 2) {
+                    int last = scores.top();
+                    scores.pop();
+                    int secondLast = scores.top();
+                    scores.push(last);
+                    scores.push(last + secondLast);
+                }
+            }
+            else
+                scores.push(stoi(a));
+        }
+        int total = 0;
+        while (!scores.empty()) {
+            total += scores.top();
+            scores.pop();
+        }
+
+        return total;
+    }
+};
