@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<int> finalPrices(vector<int>& prices) {
+        int n = prices.size();
+        vector<int> answer;
+        for(int i = 0; i < n; i++)
+        {
+            bool discounted = false;
+            for(int j = i + 1; j < n; j++)
+            {
+                if(prices[j] <= prices[i])
+                {
+                    discounted = true;
+                    answer.push_back(prices[i] - prices[j]);
+                    break;
+                }
+            }
+            if(!discounted)
+                answer.push_back(prices[i]);
+        }
+        return answer;
+    }
+};
