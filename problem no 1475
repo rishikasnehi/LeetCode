@@ -1,3 +1,4 @@
+// using nested for loops, time complexity = O(n^2), time = 8ms
 class Solution {
 public:
     vector<int> finalPrices(vector<int>& prices) {
@@ -17,6 +18,29 @@ public:
             }
             if(!discounted)
                 answer.push_back(prices[i]);
+        }
+        return answer;
+    }
+};
+
+
+
+// using stack, time complexity = O(n), time = 0ms
+class Solution {
+public:
+    vector<int> finalPrices(vector<int>& prices) {
+        vector<int> answer(prices);
+        stack<int> stk;
+        int n = prices.size();
+        for(int i = 0; i < n; i++)
+        {
+            while(!stk.empty() && prices[i] <= prices[stk.top()])
+            {
+                int idx = stk.top();
+                stk.pop();
+                answer[idx] -= prices[i]; 
+            }
+            stk.push(i);
         }
         return answer;
     }
