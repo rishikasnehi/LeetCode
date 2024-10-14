@@ -1,0 +1,27 @@
+class Solution {
+public:
+    string makeGood(string s) {
+        if(s.length() == 1)
+            return s;
+        stack<char> stk;
+        int n = s.length();
+        for(char c : s){
+            if(!stk.empty() && 
+                ((isupper(c) && islower(stk.top()) && tolower(c) == stk.top()) || 
+                 (islower(c) && isupper(stk.top()) && toupper(c) == stk.top())))
+            {
+                stk.pop();
+            }
+            else{
+                stk.push(c);
+            }
+        }
+        string res;
+        while(!stk.empty()){
+            res += stk.top();
+            stk.pop();
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
