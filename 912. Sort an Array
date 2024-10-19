@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        int n = nums.size();
+        if(n <= 1)
+            return nums;
+        int mid_idx = n / 2;
+
+        vector<int> first_half(nums.begin(), nums.begin() + mid_idx);
+        vector<int> second_half(nums.begin() + mid_idx, nums.end());
+
+        // uncomment to print first_half vector
+        // for (auto& it : first_half)
+    	// 	cout << it << ' ';
+        // cout << endl;
+
+        // uncomment to print second_half vector
+        // for (auto& it : second_half)
+    	// 	cout << it << ' ';
+        // cout << endl;
+
+        vector<int> v1 = sortArray(first_half);
+        vector<int> v2 = sortArray(second_half);
+        return mergeArray(v1, v2);
+    }
+
+    vector<int> mergeArray(vector<int> v1, vector<int> v2){
+        int n1 = v1.size(), n2 = v2.size();
+        vector<int> merged_vec(n1 + n2);
+        int idx1 = 0, idx2 = 0, merge_vec_idx = 0;
+    
+        while(idx1 < n1 && idx2 < n2){
+            if(v1[idx1] <= v2[idx2])
+                merged_vec[merge_vec_idx++] = v1[idx1++];
+            else
+                merged_vec[merge_vec_idx++] = v2[idx2++];
+        }
+        while(idx1 < n1)
+            merged_vec[merge_vec_idx++] = v1[idx1++];
+        while(idx2 < n2)
+            merged_vec[merge_vec_idx++] = v2[idx2++];
+        return merged_vec;
+    }
+
+};
