@@ -1,0 +1,19 @@
+class Solution {
+public:
+    char findTheDifference(string s, string t) {
+        map<char, int>mp;
+        for(char i : t){
+            mp[i]++;
+        }
+        for(char j : s){
+            mp[j]--;
+        }
+        for(auto m : mp){
+            if(m.second != 0){
+                return m.first;
+                break;
+            }
+        }
+        return t[t.length() - 1];
+    }
+};
