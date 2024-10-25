@@ -1,0 +1,95 @@
+class Node{
+    public:
+    int val;
+    Node* llink;
+    Node* rlink;
+    Node(int value) : val(value), llink(nullptr), rlink(nullptr) {}
+};
+
+class MyCircularDeque {
+public:
+    Node *head;
+    int max_size = 0;
+    int curr_size = 0;
+    MyCircularDeque(int k) {
+        max_size = k;
+        curr_size = 0;
+        head = new Node(-1);
+        head -> rlink = head;
+        head -> llink = head;
+    }
+    
+    bool insertFront(int value) {
+        if(isFull()){
+            return false;
+        }
+        Node *temp = head -> rlink;
+        Node *new_node = new Node(value);
+        head -> rlink = new_node;
+        temp -> llink = new_node;
+        new_node -> llink = head;
+        new_node -> rlink = temp;
+        curr_size++;
+        return true;
+    }
+    
+    bool insertLast(int value) {
+        if(isFull()){
+            return false;
+        }
+        Node *temp = head -> llink;
+        Node *new_node = new Node(value);
+        head -> llink = new_node;
+        temp -> rlink = new_node;
+        new_node -> rlink = head;
+        new_node -> llink = temp;
+        curr_size++;
+        return true;
+    }
+    
+    bool deleteFront() {
+        if(isEmpty()){
+            return false;
+        }
+        Node *todelete = head -> rlink;
+        head -> rlink = todelete -> rlink;
+        todelete -> rlink -> llink = todelete -> llink;
+        delete(todelete);
+        curr_size--;
+        return true;
+    }
+    
+    bool deleteLast() {
+        if(isEmpty()){
+            return false;
+        }
+        Node *todelete = head -> llink;
+        head -> llink = todelete -> llink;
+        todelete -> llink -> rlink = todelete -> rlink;
+        delete(todelete);
+        curr_size--;
+        return true;
+    }
+    
+    int getFront() {
+        if(isEmpty()){
+            return -1;
+        }
+        return head -> rlink -> val;
+    }
+    
+    int getRear() {
+        if(isEmpty()){
+            return -1;
+        }
+        return head -> llink -> val; 
+    }
+    
+    bool isEmpty() {
+        return (curr_size == 0);
+    }
+    
+    bool isFull() {
+        return (max_size == curr_size);
+    }
+};
