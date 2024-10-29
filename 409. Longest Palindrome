@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int longestPalindrome(string s) {
+        map<char, int> mp;
+        for(char ch : s){
+            mp[ch]++;
+        }
+        int even_occurence = 0;
+        int odd_occurence = 0;
+        for(auto pair : mp){
+            if(pair.second % 2 == 0){
+                even_occurence += pair.second;
+            }
+            else{
+                    even_occurence += pair.second - 1;
+                    odd_occurence = 1;
+            }
+        }
+        return even_occurence + odd_occurence;
+    }
+};
