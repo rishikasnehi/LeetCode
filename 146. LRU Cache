@@ -1,0 +1,86 @@
+class LRUCache {
+public:
+    class Node{
+    public:
+        int data;
+        int key;
+        Node *rlink;
+        Node *llink;
+        Node(int k, int v) : key(k), data(v), rlink(nullptr), llink(nullptr) {}
+    };
+    Node* head = new Node(-1, -1);
+    Node* tail = new Node(-1, -1);
+    int cap;
+    unordered_map<int, Node*> mp;
+    LRUCache(int capacity) {
+        cap = capacity;
+        head -> llink = tail;
+        head -> rlink = tail;
+        tail -> llink = head;
+        tail -> rlink = head;
+    }
+    
+    void addNode(Node* node){
+        Node* temp = head -> rlink;
+        head -> rlink = node;
+        node -> llink = head;
+        node -> rlink = temp;
+        temp -> llink = node;
+    }
+
+    void deleteNode(Node* del_node){
+        Node* prev = del_node -> llink;
+        Node* next = del_node -> rlink;
+        prev -> rlink = next;
+        next -> llink = prev;
+    }
+
+    int get(int key) {
+        /*1. check if the key is present in the list
+          2. if not return -1
+          3. if yes.....access the node address stored in the value of given key
+          4. return the data of that particular node
+          5. erase the address of the prev node from the map
+          6. change the node position to head -> rlink
+          7. update the map key with new node position*/
+        if(mp.find(key) != mp.end()){
+            Node* res_node = mp[key];
+            mp.erase(key);
+            deleteNode(res_node);
+            addNode(res_node);
+            mp[key] = head -> rlink;
+            return res_node -> data;
+        }
+        return -1;
+    }
+    
+    void put(int key, int value) {
+        /*1. check if the key is present in the hashmap
+          2. if yes then access the node address stored in the key value
+          3. delete the key, value pair from the node
+          4. delete the prev node from the linked list
+          5. check whether the map is full
+          6. if yes then delete the last node from the Linked list and also        delete the key value from the map
+          7. add the new node to head -> rlink
+          8. add the (key, new node address) to the map*/
+        if(mp.find(key) != mp.end()){
+            Node* curr = mp[key];
+            mp.erase(key);
+            deleteNode(curr);
+        }
+        if(mp.size() == cap){
+            mp.erase(tail -> llink -> key);
+            deleteNode(tail -> llink);
+        }
+        Node* new_node = new Node(key, value);
+        addNode(new_node);
+        mp[key] = head -> rlink;
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
