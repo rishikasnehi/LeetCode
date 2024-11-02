@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int countStudents(vector<int>& students, vector<int>& sandwiches) {
+        queue<int> stds;
+        for(int s : students){
+            stds.push(s);
+        }
+        stack<int> snd;
+        for(int i = sandwiches.size() - 1; i >= 0; i--){
+            snd.push(sandwiches[i]);
+        }
+        int cnt = 0;
+        while(!stds.empty()){
+            if(stds.front() != snd.top()){
+                if(cnt == stds.size()){
+                    return cnt;
+                    break;
+                }
+                cnt++;
+                stds.push(stds.front());
+                stds.pop();
+            }
+            else{
+                cnt = 0;
+                stds.pop();
+                snd.pop();
+            }
+        }
+        return 0;
+    }
+};
