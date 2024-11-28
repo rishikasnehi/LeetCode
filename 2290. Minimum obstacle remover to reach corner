@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int minimumObstacles(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size();
+        vector<vector<int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        
+        vector<vector<int>> min_obs(m, vector<int>(n, INT_MAX));
+        min_obs[0][0] = 0;
+        
+        queue<pair<int, int>> q;
+        q.push({0, 0});
+        
+        while (!q.empty()) {
+            int x = q.front().first;
+            int y = q.front().second;
+            q.pop();
+            
+            for (auto& dir : directions) {
+                int newX = x + dir[0];
+                int newY = y + dir[1];
+                
+                if (newX >= 0 && newX < m && newY >= 0 && newY < n) {
+                    int new_obs = grid[newX][newY] == 1 ? 1 : 0;
+                    new_obs += min_obs[x][y];
+                    
+                    if (new_obs < min_obs[newX][newY]) {
+                        min_obs[newX][newY] = new_obs;
+                        q.push({newX, newY});
+                    }
+                }
+            }
+        }
+        
+        return min_obs[m - 1][n - 1];
+    }
+};
