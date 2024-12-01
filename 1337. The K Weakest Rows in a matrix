@@ -1,0 +1,29 @@
+class Solution {
+public:
+
+    struct Compare {
+        bool operator()(const pair<int, int>& a, const pair<int, int>& b) {
+            if (a.first == b.first)
+                return a.second > b.second;
+            return a.first > b.first;
+        }
+    };
+
+
+    vector<int> kWeakestRows(vector<vector<int>>& mat, int k) {
+        priority_queue<pair<int, int>, vector<pair<int, int>> , Compare >pq;
+
+        for (int i = 0; i < mat.size(); ++i) {
+            int cnt = count(mat[i].begin(), mat[i].end(), 1);
+            pq.push({cnt, i});
+        }
+
+        vector<int> result;
+        while (k-- > 0) {
+            result.push_back(pq.top().second);
+            pq.pop();
+        }
+        
+        return result;
+    }
+};
