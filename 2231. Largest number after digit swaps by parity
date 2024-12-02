@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int largestInteger(int num) {
+        string num_str = to_string(num);
+        priority_queue<int> even_heap, odd_heap;
+
+        for (char c : num_str) {
+            int d = c - '0';
+            if (d % 2 == 0)
+                even_heap.push(d);
+            else
+                odd_heap.push(d);
+        }
+
+        for (char &digit : num_str) {
+            int d = digit - '0';
+            if (d % 2 == 0) {
+                digit = even_heap.top() + '0';
+                even_heap.pop();
+            }
+            else{
+                digit = odd_heap.top() + '0';
+                odd_heap.pop();
+            }
+        }
+
+    return stoi(num_str);
+    }
+};
