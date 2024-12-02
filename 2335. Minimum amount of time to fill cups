@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int fillCups(vector<int>& amount) {
+        priority_queue<int> pq;
+        for(int i : amount)
+            pq.push(i);
+        
+        int time = 0;
+        while(!pq.empty()){
+            int first = pq.top();
+            pq.pop();
+            if(first == 0)
+                break;
+            int second = 0;
+            if (!pq.empty()) {
+                second = pq.top();  // Get the second largest
+                pq.pop();
+            }
+            if (first > 0) 
+                first--;
+            if (second > 0)
+                second--;
+            if(first > 0)
+                pq.push(first);
+            if(second > 0)
+                pq.push(second);
+            time++;
+        }
+        return time;
+    }
+};
