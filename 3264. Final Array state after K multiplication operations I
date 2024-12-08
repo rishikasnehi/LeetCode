@@ -1,0 +1,25 @@
+class Solution {
+public:
+
+    struct Compare {
+        bool operator()(const pair<int, int>& a, const pair<int, int>& b) {
+            if (a.first == b.first)
+                return a.second > b.second;
+            return a.first > b.first;
+        }
+    };
+
+    vector<int> getFinalState(vector<int>& nums, int k, int multiplier) {
+        priority_queue<pair<int, int>, vector<pair<int,int>>, Compare>pq;
+        for(int i = 0; i < nums.size(); i++){
+            pq.push({nums[i], i});
+        }
+        while(k--){
+            auto temp = pq.top();
+            pq.pop();
+            nums[temp.second] *= multiplier;
+            pq.push({nums[temp.second], temp.second});
+        }
+        return nums;
+    }
+};
