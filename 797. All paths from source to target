@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        if(graph.empty())
+            return {};
+        
+        int n = graph.size();
+
+        queue<vector<int>>q;
+        q.push({0});
+
+        vector<vector<int>> res;
+        while(!q.empty()){
+            auto curr_path = q.front();
+            q.pop();
+
+            int node = curr_path.back();
+
+
+            for(auto ele : graph[node]){
+                vector<int> new_path = curr_path;
+                new_path.push_back(ele);
+
+                if(ele == n - 1)
+                    res.push_back(new_path);
+                else
+                    q.push(new_path);
+            }
+
+        }
+        return res;
+    }
+};
