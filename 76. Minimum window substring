@@ -1,0 +1,40 @@
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        if (s.empty() || t.empty()) 
+            return "";
+            
+        int n = t.length(), m = s.length();
+        unordered_map<char, int> t_freq;
+        for(char c : t)
+            t_freq[c]++;
+
+        unordered_map<char, int> mp;
+        int min_len = INT_MAX, min_start = 0;
+        int l = 0, r = 0;
+        int matches = 0, req_matches = t_freq.size();
+        while (r < s.length()) {
+            char curr = s[r];
+            mp[curr]++;
+
+            if (t_freq.find(curr) != t_freq.end() && mp[curr] == t_freq[curr])
+                matches++;
+
+            while (matches == req_matches) {
+                int curr_size = r - l + 1;
+                if (curr_size < min_len) {
+                    min_len = curr_size;
+                    min_start = l;
+                }
+
+                char char_left = s[l];
+                mp[char_left]--;
+                if (t_freq.find(char_left) != t_freq.end() && mp[char_left] < t_freq[char_left])
+                    matches--;
+                l++;
+            }
+            r++;
+        }
+        return min_len == INT_MAX ? "" : s.substr(min_start, min_len);
+    }
+};
