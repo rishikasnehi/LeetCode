@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int maxScore(string s) {
+        int r_one = 0, l_zero = 0, score = 0;
+        for(char i : s)
+            if(i == '1')
+                r_one++;
+
+        for(int i = 0; i < s.length() - 1; i++){
+            if(s[i] == '0')
+                l_zero++;
+            else
+                r_one--;
+            score = max(score, l_zero + r_one);
+        }
+        return score;
+    }
+};
