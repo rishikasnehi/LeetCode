@@ -27,6 +27,7 @@ public:
             prev = curr;
             curr = next_node;
         }
+
         slow -> next = NULL;
         ListNode *head2 = prev, *head1 = head, *nextt = NULL;
         while (head2) {
