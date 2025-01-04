@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
+        int n = heights.size();
+        priority_queue<int, vector<int>, greater<int>> pq;
+        for (int i = 0; i < n - 1; ++i) {
+            int diff = heights[i + 1] - heights[i];
+            if (diff > 0) {
+                // pq is storing the differences for which we will use ladder
+                if (pq.size() < ladders) {
+                    pq.push(diff);
+                } 
+                else {
+                    // if the current diff is less than pq.top(which is the min diff for which we used ladder so far) we use bricks for this diff
+                    if (pq.empty() || pq.top() >= diff) {
+                        bricks -= diff;
+                    } 
+                    // if the current diff is more than pq.top then we pop the pq.top, subtract it from bricks and then add the current diff to the pq
+                    else {
+                        int poll = pq.top(); pq.pop();
+                        pq.push(diff);
+                        bricks -= poll;
+                    }
+                    if (bricks < 0)
+                        return i;
+                }
+            }
+        }
+        return n - 1;
+    }
+};
