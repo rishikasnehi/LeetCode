@@ -1,0 +1,29 @@
+class Solution {
+public:
+    unordered_map<string, multiset<string>> graph;
+    vector<string> route;
+
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        for(auto t : tickets){
+            graph[t[0]].insert(t[1]);
+        }
+        for (auto& temp : graph) {
+            cout << temp.first << " -> ";
+            for (auto& s : temp.second) {
+                cout << s << " ";
+            }
+            cout << endl;
+        }
+        visit("JFK");
+        return vector<string>(route.rbegin(), route.rend());
+    }
+
+    void visit(string airport) {
+        while (graph[airport].size()) {
+            string next = *graph[airport].begin();
+            graph[airport].erase(graph[airport].begin());
+            visit(next);
+        }
+        route.push_back(airport);
+    }
+};
