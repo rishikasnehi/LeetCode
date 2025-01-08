@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        priority_queue<long, vector<long>, greater<long>> pq;
+        unordered_set<long> visited;
+        vector<int> primes = {2, 3, 5};
+        
+        pq.push(1);
+        visited.insert(1);
+        long curr;
+        
+        for (int i = 0; i < n; i++) {
+            curr = pq.top();
+            pq.pop();
+            for (int p : primes) {
+                long next = curr * p;
+                if (visited.find(next) == visited.end()) {
+                    pq.push(next);
+                    visited.insert(next);
+                }
+            }
+        }
+        return (int)curr;
+    }
+};
