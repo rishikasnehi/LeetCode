@@ -1,0 +1,45 @@
+class Solution {
+public:
+    double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start_node, int end_node) {
+
+        unordered_map<int, vector<pair<int, double>>> graph;
+        for(int i = 0; i < edges.size(); i++){
+            int a = edges[i][0], b = edges[i][1];
+            graph[a].push_back({b, succProb[i]});
+            graph[b].push_back({a, succProb[i]});
+        }
+
+        // for (const auto& node : graph) {
+        //     cout << "Node " << node.first << " has edges: ";
+        //     for (const auto& edge : node.second) {
+        //         cout << "(" << edge.first << ", " << edge.second << ") ";
+        //     }
+        //     cout << endl;
+        // }
+
+        set<int> visited;
+        priority_queue<pair<double, int>> pq;
+        pq.push({1.0, start_node});
+
+        while(!pq.empty()){
+            double curr_prb = pq.top().first;
+            int curr = pq.top().second;
+            visited.insert(curr);
+            pq.pop();
+
+            if(curr == end_node)
+                return curr_prb;
+
+            for(auto entry : graph[curr]){
+                double prob = entry.second;
+                int nei = entry.first;
+                if (visited.find(nei) == visited.end()){
+                    double new_prb = curr_prb * prob;
+                    pq.push({new_prb, nei});
+                }
+            }
+        }
+
+        return 0;
+    }
+};
