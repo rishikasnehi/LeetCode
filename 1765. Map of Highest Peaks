@@ -1,0 +1,36 @@
+class Solution {
+public:
+    vector<vector<int>> highestPeak(vector<vector<int>>& isWater) {
+        
+        int rows = isWater.size(), cols = isWater[0].size();
+
+        vector<vector<int>> res(rows, vector<int>(cols, -1));
+        queue<pair<int, int>> q;
+        vector<pair<int, int>> dir = {{1, 0}, {-1, 0}, {0, -1}, {0, 1}}; 
+
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                if(isWater[i][j]){
+                    res[i][j] = 0;
+                    q.push({i, j});
+                }
+            }
+        }
+
+        while(!q.empty()){
+            auto [r, c] = q.front();
+            q.pop();
+
+            for(auto entry : dir){
+                int new_r = entry.first + r;
+                int new_c = entry.second + c;
+
+                if(new_r < 0 || new_c < 0 || new_c >= cols || new_r >= rows || res[new_r][new_c] != -1)
+                    continue;
+                q.push({new_r, new_c});
+                res[new_r][new_c] = res[r][c] + 1;
+            }
+        }
+        return res;
+    }
+};
