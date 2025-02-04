@@ -1,0 +1,70 @@
+class UnionFind{
+public: 
+    unordered_map<string, string> root;
+    string find(string mail){
+        if(root[mail] == mail)
+            return mail;
+        return root[mail]= find(root[mail]);
+    }
+
+    void unionSet(string x, string y){
+        string rootx = find(x);
+        string rooty = find(y);
+        if(rootx != rooty)
+            root[rooty] = rootx;
+    }
+
+    void addRoot(string x){
+        if(root.find(x) == root.end())
+            root[x] = x;
+    }
+
+    void show(){
+        for(auto r : root){
+            cout << r.first << " -> " << r.second << endl;
+        }
+    }
+};
+
+class Solution {
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        unordered_map<string, string> graph;
+        UnionFind uf;
+
+        // to set the root of each mail and make a graph to assign each mail to the respective person
+        for(auto a : accounts){
+            string name = a[0];
+            for(int i = 1; i < a.size(); i++){
+                string curr = a[i];
+                uf.addRoot(curr);
+                if(i != 1){
+                    uf.unionSet(a[1], curr);
+                }
+                graph[curr] = name;
+            }
+        }
+        
+
+        // make a map of all the mails of the same person
+        unordered_map<string, vector<string>> merge;
+        for(auto g : graph){
+            string mail = g.first;
+            string root = uf.find(mail);
+            merge[root].push_back(mail);
+        }
+
+        // prepare the result
+        vector<vector<string>> res;
+        for(auto m : merge){
+            string root = m.first;
+            vector<string> mails(m.second);
+            sort(mails.begin(), mails.end());
+            mails.insert(mails.begin(), graph[root]);
+            res.push_back(mails);
+        }
+
+        return res;
+
+    }
+};
