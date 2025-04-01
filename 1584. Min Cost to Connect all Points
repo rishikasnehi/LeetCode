@@ -1,0 +1,65 @@
+class UnionFind{
+public: 
+    vector<int>root;
+    UnionFind(int n) : root(n){
+        for(int i = 0; i < n; i++){
+            root[i] = i;
+        }
+    }
+
+    int find(int x){
+        if(root[x] == x){
+            return x;
+        }
+        return root[x] = find(root[x]);
+    }
+
+    void us(int x, int y){
+        int rx = find(x);
+        int ry = find(y);
+        if(rx != ry){
+            root[ry] = rx;
+        }
+    }
+
+    bool isConnected(int x, int y){
+        return find(x) == find(y);
+    }
+};
+
+class Solution {
+public:
+    int minCostConnectPoints(vector<vector<int>>& points) {
+        if(points.size() == 0){
+            return 0;
+        }
+
+        int n = points.size();
+        UnionFind uf(n);
+        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> pq;
+
+
+        for(int i = 0; i < n; i++){
+            int x1 = points[i][0], y1 = points[i][1];
+            for(int j = i + 1; j < n; j++){
+                int x2 = points[j][0], y2 = points[j][1];
+                int cost = abs(x1 - x2) + abs(y1 - y2);
+                pq.push({cost, {i, j}});
+            }
+        }
+
+        int res = 0, count = n - 1;
+        while(!pq.empty() && count > 0){
+            auto [cost, cordinates] = pq.top();
+            auto [point1, point2] = cordinates;
+            pq.pop();
+            if(!uf.isConnected(point1, point2)){
+                uf.us(point1, point2);
+                res += cost;
+                count--;
+            }
+        }
+
+        return res;
+    }
+};
